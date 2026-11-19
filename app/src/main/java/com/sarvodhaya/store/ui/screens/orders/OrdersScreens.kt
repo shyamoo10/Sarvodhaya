@@ -19,8 +19,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -62,7 +62,7 @@ fun OrdersScreen(
                     .padding(padding)
             ) {
                 EmptyState(
-                    icon = Icons.Outlined.ReceiptLong,
+                    icon = Icons.AutoMirrored.Outlined.ReceiptLong,
                     title = "Sign in to see orders",
                     message = "Your order history and live tracking appear here after you sign in.",
                     actionLabel = "Sign in",
@@ -83,7 +83,7 @@ fun OrdersScreen(
                     .padding(padding)
             ) {
                 EmptyState(
-                    icon = Icons.Outlined.ReceiptLong,
+                    icon = Icons.AutoMirrored.Outlined.ReceiptLong,
                     title = "No orders yet",
                     message = "Once you place an order it will show up here with live tracking."
                 )
@@ -164,7 +164,7 @@ fun OrderDetailScreen(
                     .padding(padding)
             ) {
                 EmptyState(
-                    icon = Icons.Outlined.ReceiptLong,
+                    icon = Icons.AutoMirrored.Outlined.ReceiptLong,
                     title = "Order not found",
                     message = "This order is no longer available on this device."
                 )
