@@ -1,5 +1,6 @@
 package com.sarvodhaya.store.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -11,9 +12,12 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +37,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.sarvodhaya.store.core.ui.theme.BrandNavy
+import com.sarvodhaya.store.core.ui.theme.BrandOrange
 import com.sarvodhaya.store.di.AppContainer
 import com.sarvodhaya.store.di.containerViewModelFactory
 import com.sarvodhaya.store.ui.navigation.Destinations
@@ -312,28 +318,48 @@ private fun SarvodhayaBottomBar(
     cartCount: Int,
     onSelect: (String) -> Unit
 ) {
-    NavigationBar {
-        bottomItems.forEach { item ->
-            NavigationBarItem(
-                selected = currentRoute == item.route,
-                onClick = { onSelect(item.route) },
-                icon = {
-                    if (item.route == Destinations.CART && cartCount > 0) {
-                        BadgedBox(badge = { Badge { Text(cartCount.toString()) } }) {
+    Column {
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+            bottomItems.forEach { item ->
+                val selected = currentRoute == item.route
+                NavigationBarItem(
+                    selected = selected,
+                    onClick = { onSelect(item.route) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = BrandNavy,
+                        selectedTextColor = BrandNavy,
+                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    icon = {
+                        if (item.route == Destinations.CART && cartCount > 0) {
+                            BadgedBox(
+                                badge = {
+                                    Badge(containerColor = BrandOrange) { Text(cartCount.toString()) }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                    contentDescription = item.label
+                                )
+                            }
+                        } else {
                             Icon(
-                                imageVector = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,
+                                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
                                 contentDescription = item.label
                             )
                         }
-                    } else {
-                        Icon(
-                            imageVector = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,
-                            contentDescription = item.label
+                    },
+                    label = {
+                        Text(
+                            text = item.label,
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
-                },
-                label = { Text(item.label) }
-            )
+                )
+            }
         }
     }
 }
