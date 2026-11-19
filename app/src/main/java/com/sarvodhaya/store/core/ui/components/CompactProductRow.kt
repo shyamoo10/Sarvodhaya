@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.sarvodhaya.store.core.ui.formatPrice
 import com.sarvodhaya.store.domain.model.Product
 
 @Composable
@@ -64,7 +65,7 @@ fun CompactProductRow(
                 Spacer(Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = com.sarvodhaya.store.core.ui.formatPrice(product.price),
+                        text = product.price.formatPrice(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )

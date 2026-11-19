@@ -68,6 +68,7 @@ fun SarvodhayaRoot(container: AppContainer) {
     val snackbarHostState = remember { SnackbarHostState() }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+    val isTopLevel = currentRoute != null && topLevelRoutes.contains(currentRoute)
 
     val rootCartViewModel: CartViewModel = viewModel(
         factory = containerViewModelFactory { CartViewModel(container) }
@@ -81,7 +82,7 @@ fun SarvodhayaRoot(container: AppContainer) {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             bottomBar = {
-                if (currentRoute in topLevelRoutes) {
+                if (isTopLevel) {
                     SarvodhayaBottomBar(
                         currentRoute = currentRoute,
                         cartCount = cartCount,
@@ -114,9 +115,7 @@ fun SarvodhayaRoot(container: AppContainer) {
                         onProductClick = { navController.navigate(Destinations.product(it)) },
                         onCategoryClick = { navController.navigate(Destinations.category(it)) },
                         onBrowseAll = {
-                            navController.navigate(Destinations.SEARCH) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(Destinations.SEARCH) { launchSingleTop = true }
                         },
                         onOpenCart = { navController.navigate(Destinations.CART) { launchSingleTop = true } },
                         onOpenSearch = { navController.navigate(Destinations.SEARCH) { launchSingleTop = true } }

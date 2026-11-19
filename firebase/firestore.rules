@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Catalog is public read, write restricted to signed-in admins.
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Each shopper can only read and write their own data.
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /cart/{productId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /wishlist/{productId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /orders/{orderId} {
+        allow read, create: if isOwner(userId);
+        allow update: if isOwner(userId) && onlyStatusUpdate();
+        allow delete: if false;
+      }
+    }
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    function onlyStatusUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+    }
+  }
+}

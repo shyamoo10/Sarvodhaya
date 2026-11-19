@@ -22,12 +22,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -47,8 +47,8 @@ fun AuthScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    if (currentUser != null) {
-        onAuthenticated()
+    LaunchedEffect(currentUser) {
+        if (currentUser != null) onAuthenticated()
     }
 
     Column(
@@ -158,8 +158,7 @@ fun AuthScreen(
         Text(
             text = "By continuing you agree to our terms of service and privacy policy.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = FontWeight.Normal
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
