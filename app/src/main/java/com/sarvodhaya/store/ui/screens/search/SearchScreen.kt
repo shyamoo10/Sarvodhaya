@@ -13,15 +13,19 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.EmptyState
 import com.sarvodhaya.store.core.ui.components.ProductCard
 import com.sarvodhaya.store.core.ui.components.SectionHeader
-import com.sarvodhaya.store.domain.model.Product
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
 import com.sarvodhaya.store.ui.viewmodel.CatalogViewModel
@@ -69,7 +72,13 @@ fun SearchScreen(
                 }
             },
             singleLine = true,
-            shape = MaterialTheme.shapes.large,
+            shape = RoundedCornerShape(10.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface
+            ),
             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                 imeAction = ImeAction.Search
             )
@@ -83,7 +92,16 @@ fun SearchScreen(
                 items(categories, key = { it.id }) { category ->
                     AssistChip(
                         onClick = { onCategoryClick(category.id) },
-                        label = { Text(category.name) }
+                        label = { Text(category.name) },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        border = AssistChipDefaults.assistChipBorder(
+                            enabled = true,
+                            borderColor = MaterialTheme.colorScheme.outlineVariant
+                        )
                     )
                 }
             }
@@ -91,10 +109,15 @@ fun SearchScreen(
         }
 
         if (results.isEmpty()) {
+            val catalogEmpty = query.isBlank()
             EmptyState(
-                icon = Icons.Outlined.SearchOff,
-                title = "No matches found",
-                message = "Try a different product name or browse the categories above."
+                icon = if (catalogEmpty) Icons.Outlined.Inventory2 else Icons.Outlined.SearchOff,
+                title = if (catalogEmpty) "No products yet" else "No matches found",
+                message = if (catalogEmpty) {
+                    "The catalog is empty right now. New stock is added regularly."
+                } else {
+                    "Try a different product name or browse the categories above."
+                }
             )
         } else {
             SectionHeader(
