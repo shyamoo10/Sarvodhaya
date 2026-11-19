@@ -38,9 +38,9 @@ import com.sarvodhaya.store.core.ui.theme.BrandOrange
 @Composable
 fun SectionHeader(
     title: String,
+    modifier: Modifier = Modifier,
     actionLabel: String? = null,
-    onAction: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    onAction: (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
