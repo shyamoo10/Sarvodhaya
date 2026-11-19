@@ -67,6 +67,20 @@ object DemoCatalog {
         unit: String,
         stock: Int,
         rating: Double,
+        description: String,
+        specs: Map<String, String>
+    ) = product(id, name, brand, categoryId, price, mrp, unit, stock, rating, false, description, specs)
+
+    private fun product(
+        id: String,
+        name: String,
+        brand: String,
+        categoryId: String,
+        price: Double,
+        mrp: Double,
+        unit: String,
+        stock: Int,
+        rating: Double,
         featured: Boolean = false,
         description: String,
         specs: Map<String, String>
