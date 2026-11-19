@@ -1,5 +1,6 @@
 package com.sarvodhaya.store.ui.screens.checkout
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -58,9 +60,7 @@ fun CheckoutScreen(
         state.placedOrderId?.let(onOrderPlaced)
     }
 
-    Scaffold(
-        topBar = { SarvodhayaTopBar(title = "Checkout", onBack = onBack) }
-    ) { padding ->
+    Scaffold(topBar = { SarvodhayaTopBar(title = "Checkout", onBack = onBack) }) { padding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,63 +69,51 @@ fun CheckoutScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             item {
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 1.dp
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "Delivery address",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(Modifier.height(10.dp))
-                        AddressForm(
-                            address = state.address,
-                            onChange = { transform -> checkoutViewModel.updateAddress(transform) }
-                        )
-                    }
+                CheckoutCard {
+                    Text(
+                        text = "Delivery address",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    AddressForm(
+                        address = state.address,
+                        onChange = { transform -> checkoutViewModel.updateAddress(transform) }
+                    )
                 }
             }
             item {
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 1.dp
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "Payment method",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        PaymentOption(
-                            label = "Cash on delivery",
-                            hint = "Pay when your order arrives",
-                            selected = paymentMethod == "Cash on delivery",
-                            onClick = { paymentMethod = "Cash on delivery" }
-                        )
-                        PaymentOption(
-                            label = "UPI on delivery",
-                            hint = "Scan and pay at your doorstep",
-                            selected = paymentMethod == "UPI on delivery",
-                            onClick = { paymentMethod = "UPI on delivery" }
-                        )
-                    }
+                CheckoutCard {
+                    Text(
+                        text = "Payment method",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    PaymentOption(
+                        label = "Cash on delivery",
+                        hint = "Pay when your order arrives",
+                        selected = paymentMethod == "Cash on delivery",
+                        onClick = { paymentMethod = "Cash on delivery" }
+                    )
+                    PaymentOption(
+                        label = "UPI on delivery",
+                        hint = "Scan and pay at your doorstep",
+                        selected = paymentMethod == "UPI on delivery",
+                        onClick = { paymentMethod = "UPI on delivery" }
+                    )
                 }
             }
             item {
                 Text(
                     text = "Order summary",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
             }
             items(lines, key = { it.product.id }) { line ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "${line.quantity} x ${line.product.name}",
+                        text = "${line.quantity} \u00D7 ${line.product.name}",
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.weight(1f)
                     )
@@ -138,17 +126,24 @@ fun CheckoutScreen(
             item { OrderSummary(subtotal = subtotal, deliveryFee = deliveryFee, total = total) }
             if (state.error != null) {
                 item {
-                    Text(
-                        text = state.error.orEmpty(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.error
-                    )
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.errorContainer
+                    ) {
+                        Text(
+                            text = state.error.orEmpty(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onErrorContainer,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
                 }
             }
             item {
                 Button(
                     onClick = { checkoutViewModel.placeOrder(paymentMethod) },
                     enabled = !state.isPlacing && state.address.isComplete && lines.isNotEmpty(),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp)
@@ -160,11 +155,31 @@ fun CheckoutScreen(
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     } else {
-                        Text("Place order - ${total.formatPrice()}")
+                        Text("Place order \u2022 ${total.formatPrice()}")
                     }
+                }
+                if (!state.address.isComplete) {
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        text = "Complete the address form to place your order.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun CheckoutCard(content: @Composable () -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) { content() }
     }
 }
 
@@ -176,6 +191,7 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
             onValueChange = { value -> onChange { it.copy(fullName = value) } },
             label = { Text("Full name") },
             singleLine = true,
+            isError = address.fullName.isBlank(),
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
@@ -183,6 +199,10 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
             onValueChange = { value -> onChange { it.copy(phone = value.filter { ch -> ch.isDigit() }) } },
             label = { Text("Phone number") },
             singleLine = true,
+            isError = address.phone.isNotBlank() && address.phone.length < 10,
+            supportingText = if (address.phone.isNotBlank() && address.phone.length < 10) {
+                { Text("Enter a 10 digit mobile number") }
+            } else null,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth()
         )
@@ -190,6 +210,7 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
             value = address.line1,
             onValueChange = { value -> onChange { it.copy(line1 = value) } },
             label = { Text("House, street, area") },
+            isError = address.line1.isBlank(),
             modifier = Modifier.fillMaxWidth()
         )
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -198,6 +219,7 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
                 onValueChange = { value -> onChange { it.copy(city = value) } },
                 label = { Text("City") },
                 singleLine = true,
+                isError = address.city.isBlank(),
                 modifier = Modifier.weight(1f)
             )
             OutlinedTextField(
@@ -205,6 +227,7 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
                 onValueChange = { value -> onChange { it.copy(state = value) } },
                 label = { Text("State") },
                 singleLine = true,
+                isError = address.state.isBlank(),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -213,6 +236,10 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
             onValueChange = { value -> onChange { it.copy(pincode = value.filter { ch -> ch.isDigit() }) } },
             label = { Text("PIN code") },
             singleLine = true,
+            isError = address.pincode.isNotBlank() && address.pincode.length < 6,
+            supportingText = if (address.pincode.isNotBlank() && address.pincode.length < 6) {
+                { Text("PIN code must be 6 digits") }
+            } else null,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
@@ -228,9 +255,17 @@ private fun PaymentOption(label: String, hint: String, selected: Boolean, onClic
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RadioButton(selected = selected, onClick = onClick)
+        RadioButton(
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
+        )
         Column {
-            Text(text = label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
             Text(
                 text = hint,
                 style = MaterialTheme.typography.bodySmall,
