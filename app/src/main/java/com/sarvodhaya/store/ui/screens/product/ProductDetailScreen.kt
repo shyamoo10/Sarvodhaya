@@ -1,5 +1,6 @@
 package com.sarvodhaya.store.ui.screens.product
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +21,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,6 +50,9 @@ import com.sarvodhaya.store.core.ui.components.QuantityStepper
 import com.sarvodhaya.store.core.ui.components.RatingBadge
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.components.StockPill
+import com.sarvodhaya.store.core.ui.theme.BrandNavy
+import com.sarvodhaya.store.core.ui.theme.BrandOrange
+import com.sarvodhaya.store.core.ui.theme.BrandSteel
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
 import com.sarvodhaya.store.ui.viewmodel.CatalogViewModel
@@ -83,7 +90,7 @@ fun ProductDetailScreen(
                                     Icons.Outlined.FavoriteBorder
                                 },
                                 contentDescription = "Toggle wishlist",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = if (wishlistIds.contains(product.id)) BrandOrange else Color.White
                             )
                         }
                         IconButton(onClick = onOpenCart) {
@@ -110,74 +117,83 @@ fun ProductDetailScreen(
                 .fillMaxSize()
                 .padding(padding),
             contentPadding = PaddingValues(bottom = 28.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             item {
                 ProductImage(
                     product = product,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(260.dp)
-                        .padding(horizontal = 16.dp),
-                    corner = 22
+                        .height(280.dp),
+                    corner = 0
                 )
             }
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     Text(
-                        text = product.brand.uppercase(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = product.categoryId.uppercase(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = BrandSteel
                     )
-                    Text(
-                        text = product.name,
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                    Spacer(Modifier.height(6.dp))
+                    Spacer(Modifier.height(4.dp))
+                    Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
+                    Spacer(Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RatingBadge(product.rating)
                         Spacer(Modifier.width(10.dp))
                         StockPill(product.stock)
                     }
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(12.dp))
                     PriceRow(
                         price = product.price,
                         mrp = product.mrp,
                         discountPercent = product.discountPercent
                     )
                     Text(
-                        text = "Inclusive of all taxes - ${product.unit}",
+                        text = "Inclusive of all taxes \u2022 ${product.unit}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
             item {
-                Row(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
-                    Text(
-                        text = "Quantity",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.weight(1f)
-                    )
-                    QuantityStepper(
-                        quantity = quantity,
-                        onQuantityChange = { quantity = it },
-                        maxQuantity = product.stock.coerceAtLeast(1)
-                    )
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Quantity",
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.weight(1f)
+                        )
+                        QuantityStepper(
+                            quantity = quantity,
+                            onQuantityChange = { quantity = it },
+                            maxQuantity = product.stock.coerceAtLeast(1)
+                        )
+                    }
                 }
             }
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         OutlinedButton(
                             onClick = {
                                 wishlistViewModel.toggle(product.id)
                                 scope.launch { snackbar.showSnackbar("Wishlist updated") }
                             },
-                            modifier = Modifier.weight(1f)
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(50.dp)
                         ) {
                             Text(if (wishlistIds.contains(product.id)) "Wishlisted" else "Wishlist")
                         }
@@ -187,7 +203,10 @@ fun ProductDetailScreen(
                                 scope.launch { snackbar.showSnackbar("Added $quantity to cart") }
                             },
                             enabled = product.inStock,
-                            modifier = Modifier.weight(1f)
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(50.dp)
                         ) {
                             Text(if (product.inStock) "Add to cart" else "Out of stock")
                         }
@@ -199,9 +218,20 @@ fun ProductDetailScreen(
                             onOpenCart()
                         },
                         enabled = product.inStock,
-                        modifier = Modifier.fillMaxWidth()
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp)
                     ) {
-                        Text("Buy now")
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.ShoppingCart,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text("Buy now")
+                        }
                     }
                 }
             }
@@ -221,7 +251,7 @@ fun ProductDetailScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(vertical = 8.dp)
+                                    .padding(vertical = 9.dp)
                             ) {
                                 Text(
                                     text = entry.key,
@@ -236,7 +266,7 @@ fun ProductDetailScreen(
                                 )
                             }
                             if (index < product.specifications.size - 1) {
-                                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f))
+                                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                             }
                         }
                     }
@@ -247,20 +277,40 @@ fun ProductDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "Delivery & returns",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = "Free delivery above Rs.999 - 7 day easy returns on unused items in original packaging.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .background(BrandNavy, RoundedCornerShape(8.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.LocalShipping,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = "Delivery & returns",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(Modifier.height(2.dp))
+                            Text(
+                                text = "Free delivery above \u20B9999 \u2022 7 day easy returns on unused items in original packaging.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
             }
@@ -274,17 +324,26 @@ private fun ProductSection(title: String, content: @Composable () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 1.dp
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .width(3.dp)
+                        .height(14.dp)
+                        .background(BrandOrange, RoundedCornerShape(2.dp))
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(Modifier.height(10.dp))
             content()
         }
     }
