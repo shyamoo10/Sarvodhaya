@@ -11,3 +11,8 @@ local.properties
 
 # Never commit Firebase credentials
 app/google-services.json
+
+# Release signing material
+keystore.properties
+*.jks
+*.keystore
