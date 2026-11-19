@@ -1,5 +1,6 @@
 package com.sarvodhaya.store.ui.screens.cart
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +40,7 @@ import com.sarvodhaya.store.core.ui.components.QuantityStepper
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.formatPrice
 import com.sarvodhaya.store.core.ui.theme.BrandGreen
+import com.sarvodhaya.store.core.ui.theme.BrandSteel
 import com.sarvodhaya.store.domain.model.CartLine
 import com.sarvodhaya.store.domain.model.Pricing
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
@@ -61,16 +63,20 @@ fun CartScreen(
             if (lines.isNotEmpty()) {
                 Surface(
                     color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 6.dp
+                    tonalElevation = 8.dp
                 ) {
                     Button(
                         onClick = onCheckout,
+                        shape = RoundedCornerShape(10.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
                             .height(52.dp)
                     ) {
-                        Text("Proceed to checkout - ${total.formatPrice()}")
+                        Text(
+                            text = "Proceed to checkout \u2022 ${total.formatPrice()}",
+                            style = MaterialTheme.typography.titleSmall
+                        )
                     }
                 }
             }
@@ -129,9 +135,9 @@ private fun CartLineCard(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 1.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         onClick = onProductClick
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -139,18 +145,19 @@ private fun CartLineCard(
                 ProductImage(
                     product = line.product,
                     modifier = Modifier.size(76.dp),
-                    corner = 12
+                    corner = 8
                 )
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = line.product.brand.uppercase(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = MaterialTheme.typography.labelSmall,
+                        color = BrandSteel
                     )
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text = line.product.name,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -163,7 +170,7 @@ private fun CartLineCard(
                     Text(
                         text = line.lineTotal.formatPrice(),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Black
                     )
                 }
                 IconButton(onClick = onRemove) {
@@ -174,6 +181,8 @@ private fun CartLineCard(
                     )
                 }
             }
+            Spacer(Modifier.height(8.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -196,14 +205,14 @@ private fun CartLineCard(
 fun OrderSummary(subtotal: Double, deliveryFee: Double, total: Double) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 1.dp
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Price details",
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(10.dp))
@@ -215,7 +224,7 @@ fun OrderSummary(subtotal: Double, deliveryFee: Double, total: Double) {
             )
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 10.dp),
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                color = MaterialTheme.colorScheme.outlineVariant
             )
             SummaryRow("Total", total.formatPrice(), bold = true)
             if (subtotal in 0.001..(Pricing.FREE_DELIVERY_MIN - 0.001)) {
@@ -237,7 +246,11 @@ private fun SummaryRow(
     bold: Boolean = false,
     valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
 ) {
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 3.dp)
+    ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
