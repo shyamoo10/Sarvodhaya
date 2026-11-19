@@ -19,8 +19,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Construction
+import androidx.compose.material.icons.outlined.ElectricalServices
 import androidx.compose.material.icons.outlined.FormatPaint
+import androidx.compose.material.icons.outlined.Handyman
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Plumbing
 import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -83,14 +90,14 @@ fun ProductImage(
 }
 
 fun categoryIcon(categoryId: String): ImageVector = when (categoryId) {
-    "paints" -> androidx.compose.material.icons.Icons.Outlined.FormatPaint
-    "locks" -> androidx.compose.material.icons.Icons.Outlined.Lock
-    "cement" -> androidx.compose.material.icons.Icons.Outlined.Inventory2
-    "steel" -> androidx.compose.material.icons.Icons.Outlined.Construction
-    "plumbing" -> androidx.compose.material.icons.Icons.Outlined.Plumbing
-    "electrical" -> androidx.compose.material.icons.Icons.Outlined.ElectricalServices
-    "tools" -> androidx.compose.material.icons.Icons.Outlined.Handyman
-    "adhesives" -> androidx.compose.material.icons.Icons.Outlined.Science
+    "paints" -> Icons.Outlined.FormatPaint
+    "locks" -> Icons.Outlined.Lock
+    "cement" -> Icons.Outlined.Inventory2
+    "steel" -> Icons.Outlined.Construction
+    "plumbing" -> Icons.Outlined.Plumbing
+    "electrical" -> Icons.Outlined.ElectricalServices
+    "tools" -> Icons.Outlined.Handyman
+    "adhesives" -> Icons.Outlined.Science
     else -> Icons.Outlined.FormatPaint
 }
 

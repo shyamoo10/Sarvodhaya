@@ -26,23 +26,25 @@ class CatalogRepositoryImpl(private val db: FirebaseFirestore?) : CatalogReposit
     override val products: StateFlow<List<Product>> = _products.asStateFlow()
 
     init {
-        val store = db ?: return
-        store.collection(FirestorePaths.CATEGORIES).addSnapshotListener { snapshot, error ->
-            if (error == null && snapshot != null && !snapshot.isEmpty) {
-                val items = snapshot.documents.mapNotNull { it.toCategory() }
-                if (items.isNotEmpty()) _categories.value = items
+        val store = db
+        if (store != null) {
+            store.collection(FirestorePaths.CATEGORIES).addSnapshotListener { snapshot, error ->
+                if (error == null && snapshot != null && !snapshot.isEmpty) {
+                    val items = snapshot.documents.mapNotNull { it.toCategory() }
+                    if (items.isNotEmpty()) _categories.value = items
+                }
             }
-        }
-        store.collection(FirestorePaths.BANNERS).addSnapshotListener { snapshot, error ->
-            if (error == null && snapshot != null && !snapshot.isEmpty) {
-                val items = snapshot.documents.mapNotNull { it.toBanner() }
-                if (items.isNotEmpty()) _banners.value = items
+            store.collection(FirestorePaths.BANNERS).addSnapshotListener { snapshot, error ->
+                if (error == null && snapshot != null && !snapshot.isEmpty) {
+                    val items = snapshot.documents.mapNotNull { it.toBanner() }
+                    if (items.isNotEmpty()) _banners.value = items
+                }
             }
-        }
-        store.collection(FirestorePaths.PRODUCTS).addSnapshotListener { snapshot, error ->
-            if (error == null && snapshot != null && !snapshot.isEmpty) {
-                val items = snapshot.documents.mapNotNull { it.toProduct() }
-                if (items.isNotEmpty()) _products.value = items
+            store.collection(FirestorePaths.PRODUCTS).addSnapshotListener { snapshot, error ->
+                if (error == null && snapshot != null && !snapshot.isEmpty) {
+                    val items = snapshot.documents.mapNotNull { it.toProduct() }
+                    if (items.isNotEmpty()) _products.value = items
+                }
             }
         }
     }
