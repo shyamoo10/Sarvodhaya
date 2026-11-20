@@ -1,6 +1,5 @@
 package com.sarvodhaya.store.ui.screens.orders
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
@@ -58,7 +56,9 @@ fun OrdersScreen(
     val orders by ordersViewModel.orders.collectAsStateWithLifecycle()
     val isLoading by ordersViewModel.isLoading.collectAsStateWithLifecycle()
 
-    Scaffold(topBar = { SarvodhayaTopBar(title = "My orders") }) { padding ->
+    Scaffold(
+        topBar = { SarvodhayaTopBar(title = "My orders") },
+    ) { padding ->
         when {
             !isSignedIn -> Column(
                 modifier = Modifier
@@ -160,7 +160,9 @@ fun OrderDetailScreen(
     val orders by ordersViewModel.orders.collectAsStateWithLifecycle()
     val order = orders.firstOrNull { it.id == orderId }
 
-    Scaffold(topBar = { SarvodhayaTopBar(title = "Order details", onBack = onBack) }) { padding ->
+    Scaffold(
+        topBar = { SarvodhayaTopBar(title = "Order details", onBack = onBack) },
+    ) { padding ->
         if (order == null) {
             Column(
                 modifier = Modifier

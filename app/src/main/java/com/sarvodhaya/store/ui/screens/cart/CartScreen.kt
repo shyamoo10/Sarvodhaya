@@ -1,6 +1,5 @@
 package com.sarvodhaya.store.ui.screens.cart
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.ShoppingCart
@@ -83,7 +81,7 @@ fun CartScreen(
                     }
                 }
             }
-        }
+        },
     ) { padding ->
         if (lines.isEmpty()) {
             Column(
