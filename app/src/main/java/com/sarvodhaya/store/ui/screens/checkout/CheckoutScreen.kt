@@ -38,6 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.formatPrice
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.FieldShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.domain.model.Address
 import com.sarvodhaya.store.ui.screens.cart.OrderSummary
 import com.sarvodhaya.store.ui.viewmodel.CheckoutViewModel
@@ -60,7 +64,9 @@ fun CheckoutScreen(
         state.placedOrderId?.let(onOrderPlaced)
     }
 
-    Scaffold(topBar = { SarvodhayaTopBar(title = "Checkout", onBack = onBack) }) { padding ->
+    Scaffold(
+        topBar = { SarvodhayaTopBar(title = "Checkout", onBack = onBack) }
+    ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -127,7 +133,7 @@ fun CheckoutScreen(
             if (state.error != null) {
                 item {
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = FieldShape,
                         color = MaterialTheme.colorScheme.errorContainer
                     ) {
                         Text(
@@ -143,7 +149,7 @@ fun CheckoutScreen(
                 Button(
                     onClick = { checkoutViewModel.placeOrder(paymentMethod) },
                     enabled = !state.isPlacing && state.address.isComplete && lines.isNotEmpty(),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = PillShape,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp)
@@ -175,11 +181,11 @@ fun CheckoutScreen(
 private fun CheckoutCard(content: @Composable () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        shadowElevation = CardShadow
     ) {
-        Column(modifier = Modifier.padding(16.dp)) { content() }
+        Column(modifier = Modifier.padding(18.dp)) { content() }
     }
 }
 
@@ -192,7 +198,8 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
             label = { Text("Full name") },
             singleLine = true,
             isError = address.fullName.isBlank(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = FieldShape
         )
         OutlinedTextField(
             value = address.phone,
@@ -204,14 +211,16 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
                 { Text("Enter a 10 digit mobile number") }
             } else null,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = FieldShape
         )
         OutlinedTextField(
             value = address.line1,
             onValueChange = { value -> onChange { it.copy(line1 = value) } },
             label = { Text("House, street, area") },
             isError = address.line1.isBlank(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = FieldShape
         )
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             OutlinedTextField(
@@ -220,7 +229,8 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
                 label = { Text("City") },
                 singleLine = true,
                 isError = address.city.isBlank(),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                shape = FieldShape
             )
             OutlinedTextField(
                 value = address.state,
@@ -228,7 +238,8 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
                 label = { Text("State") },
                 singleLine = true,
                 isError = address.state.isBlank(),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                shape = FieldShape
             )
         }
         OutlinedTextField(
@@ -241,7 +252,8 @@ private fun AddressForm(address: Address, onChange: ((Address) -> Address) -> Un
                 { Text("PIN code must be 6 digits") }
             } else null,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = FieldShape
         )
     }
 }

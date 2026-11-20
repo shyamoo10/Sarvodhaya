@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -48,11 +49,13 @@ import com.sarvodhaya.store.core.ui.components.CompactProductRow
 import com.sarvodhaya.store.core.ui.components.ProductCard
 import com.sarvodhaya.store.core.ui.components.SectionHeader
 import com.sarvodhaya.store.core.ui.components.categoryIcon
+import com.sarvodhaya.store.core.ui.theme.BrandAccent
 import com.sarvodhaya.store.core.ui.theme.BrandAmber
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandNavyDeep
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
-import com.sarvodhaya.store.core.ui.theme.BrandSteel
+import com.sarvodhaya.store.core.ui.theme.BrandForest
+import com.sarvodhaya.store.core.ui.theme.BrandForestDeep
+import com.sarvodhaya.store.core.ui.theme.BrandMuted
+import com.sarvodhaya.store.core.ui.theme.PanelShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.domain.model.Banner
 import com.sarvodhaya.store.domain.model.Category
 import com.sarvodhaya.store.domain.model.Product
@@ -150,22 +153,24 @@ private fun HomeHero(cartCount: Int, onOpenCart: () -> Unit, onOpenSearch: () ->
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 26.dp, bottomEnd = 26.dp))
-            .background(Brush.verticalGradient(listOf(BrandNavyDeep, BrandNavy)))
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 20.dp)
+            .clip(RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp))
+            .background(
+                Brush.verticalGradient(listOf(BrandForestDeep, BrandForest))
+            )
+            .padding(start = 18.dp, end = 18.dp, top = 14.dp, bottom = 22.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(42.dp)
-                    .background(BrandOrange, RoundedCornerShape(10.dp)),
+                    .size(44.dp)
+                    .background(BrandAmber, RoundedCornerShape(14.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "S",
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White
+                    fontWeight = FontWeight.SemiBold,
+                    color = BrandForestDeep
                 )
             }
             Spacer(Modifier.width(12.dp))
@@ -186,7 +191,7 @@ private fun HomeHero(cartCount: Int, onOpenCart: () -> Unit, onOpenSearch: () ->
                 BadgedBox(
                     badge = {
                         if (cartCount > 0) {
-                            Badge(containerColor = BrandOrange) { Text(cartCount.toString()) }
+                            Badge(containerColor = BrandAccent) { Text(cartCount.toString()) }
                         }
                     }
                 ) {
@@ -201,8 +206,8 @@ private fun HomeHero(cartCount: Int, onOpenCart: () -> Unit, onOpenSearch: () ->
         Spacer(Modifier.height(18.dp))
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp),
-            color = Color.White,
+            shape = PillShape,
+            color = MaterialTheme.colorScheme.surface,
             onClick = onOpenSearch
         ) {
             Row(
@@ -212,14 +217,14 @@ private fun HomeHero(cartCount: Int, onOpenCart: () -> Unit, onOpenSearch: () ->
                 Icon(
                     imageVector = Icons.Outlined.Search,
                     contentDescription = null,
-                    tint = BrandSteel,
+                    tint = BrandMuted,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
                     text = "Search paints, locks, cement, tools",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = BrandSteel
+                    color = BrandMuted
                 )
             }
         }
@@ -235,15 +240,15 @@ private fun HomeHero(cartCount: Int, onOpenCart: () -> Unit, onOpenSearch: () ->
 @Composable
 private fun HeroChip(label: String) {
     Surface(
-        shape = RoundedCornerShape(6.dp),
-        color = Color.White.copy(alpha = 0.10f),
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.14f))
+        shape = PillShape,
+        color = Color.White.copy(alpha = 0.12f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.16f))
     ) {
         Text(
-            text = label.uppercase(),
+            text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = Color.White.copy(alpha = 0.85f),
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
+            color = Color.White.copy(alpha = 0.90f),
+            modifier = Modifier.padding(horizontal = 11.dp, vertical = 6.dp)
         )
     }
 }
@@ -262,8 +267,8 @@ private fun BannerCarousel(banners: List<Banner>, onBannerClick: (Banner) -> Uni
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(164.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .height(170.dp)
+                    .clip(PanelShape)
                     .background(
                         brush = Brush.linearGradient(
                             listOf(Color(banner.startColor), Color(banner.endColor))
@@ -277,14 +282,14 @@ private fun BannerCarousel(banners: List<Banner>, onBannerClick: (Banner) -> Uni
                         .padding(20.dp)
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(4.dp),
+                        shape = PillShape,
                         color = BrandAmber
                     ) {
                         Text(
                             text = "OFFER",
                             style = MaterialTheme.typography.labelSmall,
-                            color = BrandNavyDeep,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            color = BrandForestDeep,
+                            modifier = Modifier.padding(horizontal = 9.dp, vertical = 3.dp)
                         )
                     }
                     Spacer(Modifier.height(8.dp))
@@ -302,14 +307,14 @@ private fun BannerCarousel(banners: List<Banner>, onBannerClick: (Banner) -> Uni
                     )
                     Spacer(Modifier.height(14.dp))
                     Surface(
-                        shape = RoundedCornerShape(6.dp),
-                        color = BrandOrange
+                        shape = PillShape,
+                        color = Color.White
                     ) {
                         Text(
-                            text = banner.ctaLabel.uppercase(),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Color.White,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp)
+                            text = banner.ctaLabel,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = BrandForestDeep,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
                     }
                 }
@@ -327,7 +332,7 @@ private fun BannerCarousel(banners: List<Banner>, onBannerClick: (Banner) -> Uni
                         .padding(horizontal = 3.dp)
                         .size(width = if (selected) 18.dp else 6.dp, height = 4.dp)
                         .background(
-                            color = if (selected) BrandOrange else MaterialTheme.colorScheme.outline,
+                            color = if (selected) BrandAmber else MaterialTheme.colorScheme.outline,
                             shape = RoundedCornerShape(2.dp)
                         )
                 )
@@ -357,24 +362,20 @@ private fun CategoryGrid(
                             .clickable { onCategoryClick(category.id) },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(62.dp)
-                                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp)),
-                            contentAlignment = Alignment.Center
+                        Surface(
+                            modifier = Modifier.size(64.dp),
+                            shape = RoundedCornerShape(20.dp),
+                            color = MaterialTheme.colorScheme.surface,
+                            shadowElevation = 3.dp
                         ) {
-                            Surface(
-                                modifier = Modifier.size(62.dp),
-                                shape = RoundedCornerShape(12.dp),
-                                color = Color.Transparent,
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-                            ) {}
-                            Icon(
-                                imageVector = categoryIcon(category.id),
-                                contentDescription = null,
-                                tint = BrandNavy,
-                                modifier = Modifier.size(26.dp)
-                            )
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = categoryIcon(category.id),
+                                    contentDescription = null,
+                                    tint = BrandForest,
+                                    modifier = Modifier.size(26.dp)
+                                )
+                            }
                         }
                         Spacer(Modifier.height(6.dp))
                         Text(
@@ -397,7 +398,7 @@ private fun ServiceStrip() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = PanelShape,
         color = MaterialTheme.colorScheme.secondaryContainer
     ) {
         Row(
@@ -406,8 +407,8 @@ private fun ServiceStrip() {
         ) {
             Box(
                 modifier = Modifier
-                    .size(38.dp)
-                    .background(BrandNavy, RoundedCornerShape(8.dp)),
+                    .size(40.dp)
+                    .background(BrandForest, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(

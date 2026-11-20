@@ -37,6 +37,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.EmptyState
 import com.sarvodhaya.store.core.ui.components.ProductCard
 import com.sarvodhaya.store.core.ui.components.SectionHeader
+import com.sarvodhaya.store.core.ui.theme.FieldShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
+import com.sarvodhaya.store.domain.model.Product
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
 import com.sarvodhaya.store.ui.viewmodel.CatalogViewModel
@@ -72,9 +75,9 @@ fun SearchScreen(
                 }
             },
             singleLine = true,
-            shape = RoundedCornerShape(10.dp),
+            shape = PillShape,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                focusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 focusedContainerColor = MaterialTheme.colorScheme.surface
@@ -92,8 +95,13 @@ fun SearchScreen(
                 items(categories, key = { it.id }) { category ->
                     AssistChip(
                         onClick = { onCategoryClick(category.id) },
-                        label = { Text(category.name) },
-                        shape = RoundedCornerShape(8.dp),
+                        label = {
+                            Text(
+                                category.name,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        },
+                        shape = PillShape,
                         colors = AssistChipDefaults.assistChipColors(
                             containerColor = MaterialTheme.colorScheme.surface,
                             labelColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -127,8 +135,8 @@ fun SearchScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 items(results, key = { it.id }) { product ->
                     ProductCard(
