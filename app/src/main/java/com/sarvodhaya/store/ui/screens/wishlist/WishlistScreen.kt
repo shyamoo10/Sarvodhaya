@@ -3,6 +3,7 @@ package com.sarvodhaya.store.ui.screens.wishlist
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -36,7 +37,12 @@ fun WishlistScreen(
     val snackbar = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
 
-    Scaffold(topBar = { SarvodhayaTopBar(title = "Wishlist") }) { padding ->
+    Scaffold(
+        topBar = { SarvodhayaTopBar(title = "Wishlist") },
+        // The root Scaffold already reserves the bottom bar's height, so this
+        // screen must not add the system bottom inset on top of it.
+        contentWindowInsets = WindowInsets(0)
+    ) { padding ->
         if (products.isEmpty()) {
             Column(
                 modifier = Modifier

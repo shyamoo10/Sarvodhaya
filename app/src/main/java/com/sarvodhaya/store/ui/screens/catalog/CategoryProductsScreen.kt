@@ -3,6 +3,7 @@ package com.sarvodhaya.store.ui.screens.catalog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -76,6 +77,9 @@ fun CategoryProductsScreen(
 
     Scaffold(
         topBar = { SarvodhayaTopBar(title = categoryName, onBack = onBack) },
+        // The root Scaffold already reserves the bottom bar's height, so this
+        // screen must not add the system bottom inset on top of it.
+        contentWindowInsets = WindowInsets(0)
     ) { padding ->
         Column(
             modifier = Modifier
