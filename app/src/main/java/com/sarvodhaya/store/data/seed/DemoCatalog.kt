@@ -25,8 +25,8 @@ object DemoCatalog {
             subtitle = "Up to 25% off on exterior emulsions",
             ctaLabel = "Shop paints",
             categoryId = "paints",
-            startColor = 0xFFE2611A,
-            endColor = 0xFFB2460F
+            startColor = 0xFF3C6157,
+            endColor = 0xFF223B36
         ),
         Banner(
             id = "banner-locks",
@@ -34,8 +34,8 @@ object DemoCatalog {
             subtitle = "Premium locks and handles from Rs.399",
             ctaLabel = "Explore locks",
             categoryId = "locks",
-            startColor = 0xFF0E2233,
-            endColor = 0xFF16324B
+            startColor = 0xFF4E6E65,
+            endColor = 0xFF2C4A43
         ),
         Banner(
             id = "banner-cement",
@@ -43,8 +43,8 @@ object DemoCatalog {
             subtitle = "Trusted brands delivered to your site",
             ctaLabel = "Order cement",
             categoryId = "cement",
-            startColor = 0xFF3B414A,
-            endColor = 0xFF191C21
+            startColor = 0xFF6A7F77,
+            endColor = 0xFF3C4F49
         ),
         Banner(
             id = "banner-tools",
@@ -52,8 +52,8 @@ object DemoCatalog {
             subtitle = "Drills, grinders and saws at best prices",
             ctaLabel = "View tools",
             categoryId = "tools",
-            startColor = 0xFF64707C,
-            endColor = 0xFF16324B
+            startColor = 0xFF587A6F,
+            endColor = 0xFF2A443C
         )
     )
 

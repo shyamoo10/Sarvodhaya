@@ -120,8 +120,8 @@ private fun DocumentSnapshot.toBanner(): Banner? {
         subtitle = getString("subtitle").orEmpty(),
         ctaLabel = getString("ctaLabel") ?: "Shop now",
         categoryId = getString("categoryId").orEmpty(),
-        startColor = getLong("startColor") ?: 0xFF16324B,
-        endColor = getLong("endColor") ?: 0xFF0E2233
+        startColor = getLong("startColor") ?: 0xFF33544D,
+        endColor = getLong("endColor") ?: 0xFF223B36
     )
 }
 
