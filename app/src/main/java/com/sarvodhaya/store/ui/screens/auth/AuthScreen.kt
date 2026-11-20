@@ -42,9 +42,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandNavyDeep
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
+import com.sarvodhaya.store.core.ui.theme.BrandAmber
+import com.sarvodhaya.store.core.ui.theme.BrandForest
+import com.sarvodhaya.store.core.ui.theme.BrandForestDeep
+import com.sarvodhaya.store.core.ui.theme.FieldShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.ui.viewmodel.AuthViewModel
 
 @Composable
@@ -68,21 +70,21 @@ fun AuthScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Brush.verticalGradient(listOf(BrandNavyDeep, BrandNavy)))
+                .background(Brush.verticalGradient(listOf(BrandForestDeep, BrandForest)))
                 .padding(horizontal = 24.dp, vertical = 28.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(38.dp)
-                        .background(BrandOrange, RoundedCornerShape(9.dp)),
+                        .size(40.dp)
+                        .background(BrandAmber, RoundedCornerShape(14.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "S",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Black,
-                        color = Color.White
+                        fontWeight = FontWeight.SemiBold,
+                        color = BrandForestDeep
                     )
                 }
                 Spacer(Modifier.width(10.dp))
@@ -130,7 +132,7 @@ fun AuthScreen(
                     onValueChange = { name = it },
                     label = { Text("Full name") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = FieldShape,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -139,7 +141,7 @@ fun AuthScreen(
                 onValueChange = { email = it },
                 label = { Text("Email") },
                 singleLine = true,
-                shape = RoundedCornerShape(10.dp),
+                shape = FieldShape,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -148,7 +150,7 @@ fun AuthScreen(
                 onValueChange = { password = it },
                 label = { Text("Password") },
                 singleLine = true,
-                shape = RoundedCornerShape(10.dp),
+                shape = FieldShape,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier.fillMaxWidth()
@@ -168,7 +170,7 @@ fun AuthScreen(
                     else authViewModel.signIn(email, password)
                 },
                 enabled = !state.loading,
-                shape = RoundedCornerShape(10.dp),
+                shape = PillShape,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
@@ -190,9 +192,8 @@ fun AuthScreen(
 
             if (!authViewModel.isFirebaseConfigured) {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shape = FieldShape,
+                    color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Text(
                         text = "Firebase is not configured yet. Add app/google-services.json to this project and rebuild to enable real accounts.",

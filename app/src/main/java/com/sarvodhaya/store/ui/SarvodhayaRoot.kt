@@ -1,18 +1,18 @@
 package com.sarvodhaya.store.ui
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -21,6 +21,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -37,8 +39,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
+import com.sarvodhaya.store.core.ui.theme.BrandAccent
 import com.sarvodhaya.store.di.AppContainer
 import com.sarvodhaya.store.di.containerViewModelFactory
 import com.sarvodhaya.store.ui.navigation.Destinations
@@ -60,21 +61,13 @@ import com.sarvodhaya.store.ui.viewmodel.CheckoutViewModel
 import com.sarvodhaya.store.ui.viewmodel.OrdersViewModel
 import com.sarvodhaya.store.ui.viewmodel.WishlistViewModel
 
-private val topLevelRoutes = setOf(
-    Destinations.HOME,
-    Destinations.SEARCH,
-    Destinations.WISHLIST,
-    Destinations.CART,
-    Destinations.PROFILE
-)
-
 @Composable
 fun SarvodhayaRoot(container: AppContainer) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val isTopLevel = currentRoute != null && topLevelRoutes.contains(currentRoute)
+    val selectedTab = selectedTabFor(currentRoute)
 
     val rootCartViewModel: CartViewModel = viewModel(
         factory = containerViewModelFactory { CartViewModel(container) }
@@ -87,20 +80,22 @@ fun SarvodhayaRoot(container: AppContainer) {
     ) {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
+            /* The bar stays mounted on every destination so moving into a
+             * product, category, order or checkout screen never strands the
+             * shopper. Scaffold reserves its height as padding for the
+             * NavHost, so no screen content runs underneath it. */
             bottomBar = {
-                if (isTopLevel) {
-                    SarvodhayaBottomBar(
-                        currentRoute = currentRoute,
-                        cartCount = cartCount,
-                        onSelect = { route ->
-                            navController.navigate(route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                SarvodhayaBottomBar(
+                    selectedTab = selectedTab,
+                    cartCount = cartCount,
+                    onSelect = { route ->
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                    )
-                }
+                    }
+                )
             }
         ) { padding ->
             NavHost(
@@ -297,6 +292,26 @@ fun SarvodhayaRoot(container: AppContainer) {
     }
 }
 
+/**
+ * Maps a destination to the tab that should stay highlighted for it.
+ * Product, category, checkout, order and auth screens belong to the
+ * branch they were opened from, so the bar keeps its place.
+ */
+private fun selectedTabFor(route: String?): String? = when (route) {
+    Destinations.HOME -> Destinations.HOME
+    Destinations.SEARCH,
+    Destinations.CATEGORY_PATTERN,
+    Destinations.PRODUCT_PATTERN -> Destinations.SEARCH
+    Destinations.WISHLIST -> Destinations.WISHLIST
+    Destinations.CART,
+    Destinations.CHECKOUT -> Destinations.CART
+    Destinations.PROFILE,
+    Destinations.ORDERS,
+    Destinations.ORDER_PATTERN,
+    Destinations.AUTH -> Destinations.PROFILE
+    else -> null
+}
+
 private data class BottomItem(
     val route: String,
     val label: String,
@@ -306,29 +321,31 @@ private data class BottomItem(
 
 private val bottomItems = listOf(
     BottomItem(Destinations.HOME, "Home", Icons.Filled.Home, Icons.Outlined.Home),
-    BottomItem(Destinations.SEARCH, "Search", Icons.Outlined.Search, Icons.Outlined.Search),
+    BottomItem(Destinations.SEARCH, "Products", Icons.Filled.GridView, Icons.Outlined.GridView),
     BottomItem(Destinations.WISHLIST, "Wishlist", Icons.Filled.Favorite, Icons.Outlined.FavoriteBorder),
-    BottomItem(Destinations.CART, "Cart", Icons.Filled.ShoppingCart, Icons.Filled.ShoppingCart),
+    BottomItem(Destinations.CART, "Cart", Icons.Filled.ShoppingCart, Icons.Outlined.ShoppingCart),
     BottomItem(Destinations.PROFILE, "Profile", Icons.Filled.Person, Icons.Filled.Person)
 )
 
 @Composable
 private fun SarvodhayaBottomBar(
-    currentRoute: String?,
+    selectedTab: String?,
     cartCount: Int,
     onSelect: (String) -> Unit
 ) {
-    Column {
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+    Surface(color = MaterialTheme.colorScheme.surface, shadowElevation = 16.dp) {
+        NavigationBar(
+            containerColor = MaterialTheme.colorScheme.surface,
+            tonalElevation = 0.dp
+        ) {
             bottomItems.forEach { item ->
-                val selected = currentRoute == item.route
+                val selected = selectedTab == item.route
                 NavigationBarItem(
                     selected = selected,
                     onClick = { onSelect(item.route) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = BrandNavy,
-                        selectedTextColor = BrandNavy,
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
                         indicatorColor = MaterialTheme.colorScheme.primaryContainer,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -337,7 +354,7 @@ private fun SarvodhayaBottomBar(
                         if (item.route == Destinations.CART && cartCount > 0) {
                             BadgedBox(
                                 badge = {
-                                    Badge(containerColor = BrandOrange) { Text(cartCount.toString()) }
+                                    Badge(containerColor = BrandAccent) { Text(cartCount.toString()) }
                                 }
                             ) {
                                 Icon(

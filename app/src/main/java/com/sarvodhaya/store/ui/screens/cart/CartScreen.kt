@@ -40,7 +40,10 @@ import com.sarvodhaya.store.core.ui.components.QuantityStepper
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.formatPrice
 import com.sarvodhaya.store.core.ui.theme.BrandGreen
-import com.sarvodhaya.store.core.ui.theme.BrandSteel
+import com.sarvodhaya.store.core.ui.theme.BrandMuted
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.domain.model.CartLine
 import com.sarvodhaya.store.domain.model.Pricing
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
@@ -63,15 +66,15 @@ fun CartScreen(
             if (lines.isNotEmpty()) {
                 Surface(
                     color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 8.dp
+                    shadowElevation = 16.dp
                 ) {
                     Button(
                         onClick = onCheckout,
-                        shape = RoundedCornerShape(10.dp),
+                        shape = PillShape,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                            .height(52.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .height(54.dp)
                     ) {
                         Text(
                             text = "Proceed to checkout \u2022 ${total.formatPrice()}",
@@ -102,7 +105,7 @@ fun CartScreen(
                     .fillMaxSize()
                     .padding(padding),
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 items(lines, key = { it.product.id }) { line ->
                     CartLineCard(
@@ -135,9 +138,9 @@ private fun CartLineCard(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        shadowElevation = CardShadow,
         onClick = onProductClick
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -152,7 +155,7 @@ private fun CartLineCard(
                     Text(
                         text = line.product.brand.uppercase(),
                         style = MaterialTheme.typography.labelSmall,
-                        color = BrandSteel
+                        color = BrandMuted
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
@@ -205,11 +208,11 @@ private fun CartLineCard(
 fun OrderSummary(subtotal: Double, deliveryFee: Double, total: Double) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        shadowElevation = CardShadow
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
             Text(
                 text = "Price details",
                 style = MaterialTheme.typography.titleSmall,

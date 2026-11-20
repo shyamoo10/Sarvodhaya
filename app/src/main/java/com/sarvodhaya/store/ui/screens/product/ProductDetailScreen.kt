@@ -50,9 +50,15 @@ import com.sarvodhaya.store.core.ui.components.QuantityStepper
 import com.sarvodhaya.store.core.ui.components.RatingBadge
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.components.StockPill
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
-import com.sarvodhaya.store.core.ui.theme.BrandSteel
+import com.sarvodhaya.store.core.ui.components.categoryIcon
+import com.sarvodhaya.store.core.ui.theme.BrandAccent
+import com.sarvodhaya.store.core.ui.theme.BrandAmber
+import com.sarvodhaya.store.core.ui.theme.BrandForest
+import com.sarvodhaya.store.core.ui.theme.BrandMuted
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.PanelShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
 import com.sarvodhaya.store.ui.viewmodel.CatalogViewModel
@@ -90,7 +96,7 @@ fun ProductDetailScreen(
                                     Icons.Outlined.FavoriteBorder
                                 },
                                 contentDescription = "Toggle wishlist",
-                                tint = if (wishlistIds.contains(product.id)) BrandOrange else Color.White
+                                tint = if (wishlistIds.contains(product.id)) BrandAccent else Color.White
                             )
                         }
                         IconButton(onClick = onOpenCart) {
@@ -133,10 +139,13 @@ fun ProductDetailScreen(
                     Text(
                         text = product.categoryId.uppercase(),
                         style = MaterialTheme.typography.labelSmall,
-                        color = BrandSteel
+                        color = BrandMuted
                     )
                     Spacer(Modifier.height(4.dp))
-                    Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = product.name,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                     Spacer(Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RatingBadge(product.rating)
@@ -161,12 +170,12 @@ fun ProductDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CardShape,
                     color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shadowElevation = CardShadow
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -190,7 +199,7 @@ fun ProductDetailScreen(
                                 wishlistViewModel.toggle(product.id)
                                 scope.launch { snackbar.showSnackbar("Wishlist updated") }
                             },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = PillShape,
                             modifier = Modifier
                                 .weight(1f)
                                 .height(50.dp)
@@ -203,7 +212,7 @@ fun ProductDetailScreen(
                                 scope.launch { snackbar.showSnackbar("Added $quantity to cart") }
                             },
                             enabled = product.inStock,
-                            shape = RoundedCornerShape(10.dp),
+                            shape = PillShape,
                             modifier = Modifier
                                 .weight(1f)
                                 .height(50.dp)
@@ -218,10 +227,10 @@ fun ProductDetailScreen(
                             onOpenCart()
                         },
                         enabled = product.inStock,
-                        shape = RoundedCornerShape(10.dp),
+                        shape = PillShape,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(52.dp)
+                            .height(54.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -277,7 +286,7 @@ fun ProductDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = PanelShape,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Row(
@@ -286,8 +295,8 @@ fun ProductDetailScreen(
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(34.dp)
-                                .background(BrandNavy, RoundedCornerShape(8.dp)),
+                                .size(38.dp)
+                                .background(BrandForest, androidx.compose.foundation.shape.CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
@@ -324,17 +333,17 @@ private fun ProductSection(title: String, content: @Composable () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        shadowElevation = CardShadow
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
                         .width(3.dp)
                         .height(14.dp)
-                        .background(BrandOrange, RoundedCornerShape(2.dp))
+                        .background(BrandAmber, RoundedCornerShape(2.dp))
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(

@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.EmptyState
 import com.sarvodhaya.store.core.ui.components.ProductCard
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.domain.model.Product
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
@@ -75,7 +75,9 @@ fun CategoryProductsScreen(
         }
     }
 
-    Scaffold(topBar = { SarvodhayaTopBar(title = categoryName, onBack = onBack) }) { padding ->
+    Scaffold(
+        topBar = { SarvodhayaTopBar(title = categoryName, onBack = onBack) }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -91,6 +93,7 @@ fun CategoryProductsScreen(
                             selected = inStockOnly,
                             onClick = { inStockOnly = !inStockOnly },
                             label = { Text("In stock") },
+                            shape = PillShape,
                             colors = industrialChipColors()
                         )
                     }
@@ -99,6 +102,7 @@ fun CategoryProductsScreen(
                             selected = sortOption == option,
                             onClick = { sortOption = option },
                             label = { Text(option.label) },
+                            shape = PillShape,
                             colors = industrialChipColors()
                         )
                     }
@@ -128,8 +132,8 @@ fun CategoryProductsScreen(
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     items(visibleProducts, key = { it.id }) { product ->
                         ProductCard(
@@ -149,8 +153,8 @@ fun CategoryProductsScreen(
 
 @Composable
 private fun industrialChipColors() = FilterChipDefaults.filterChipColors(
-    selectedContainerColor = BrandNavy,
-    selectedLabelColor = Color.White,
+    selectedContainerColor = MaterialTheme.colorScheme.primary,
+    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
     containerColor = MaterialTheme.colorScheme.surface,
     labelColor = MaterialTheme.colorScheme.onSurfaceVariant
 )

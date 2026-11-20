@@ -3,7 +3,6 @@ package com.sarvodhaya.store.core.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -47,12 +47,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sarvodhaya.store.core.ui.formatPrice
+import com.sarvodhaya.store.core.ui.theme.BrandAccent
 import com.sarvodhaya.store.core.ui.theme.BrandAmber
-import com.sarvodhaya.store.core.ui.theme.BrandCharcoal
-import com.sarvodhaya.store.core.ui.theme.BrandConcrete
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
-import com.sarvodhaya.store.core.ui.theme.BrandSteel
+import com.sarvodhaya.store.core.ui.theme.BrandAmberDeep
+import com.sarvodhaya.store.core.ui.theme.BrandAmberSoft
+import com.sarvodhaya.store.core.ui.theme.BrandMuted
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.domain.model.Product
 
 /** Product visual with a branded placeholder when no photo is available. */
@@ -60,7 +62,7 @@ import com.sarvodhaya.store.domain.model.Product
 fun ProductImage(
     product: Product,
     modifier: Modifier = Modifier,
-    corner: Int = 10
+    corner: Int = 14
 ) {
     val shape = RoundedCornerShape(corner.dp)
     Box(
@@ -70,7 +72,7 @@ fun ProductImage(
                 Brush.verticalGradient(
                     listOf(
                         MaterialTheme.colorScheme.surfaceVariant,
-                        BrandConcrete.copy(alpha = 0.55f)
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
                     )
                 )
             ),
@@ -87,8 +89,8 @@ fun ProductImage(
             Icon(
                 imageVector = categoryIcon(product.categoryId),
                 contentDescription = null,
-                tint = BrandSteel.copy(alpha = 0.55f),
-                modifier = Modifier.size(36.dp)
+                tint = BrandMuted.copy(alpha = 0.45f),
+                modifier = Modifier.size(34.dp)
             )
         }
     }
@@ -117,7 +119,7 @@ fun PriceRow(
         Text(
             text = price.formatPrice(),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Black,
+            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface
         )
         if (mrp > price) {
@@ -134,7 +136,7 @@ fun PriceRow(
             Text(
                 text = "$discountPercent% OFF",
                 style = MaterialTheme.typography.labelSmall,
-                color = BrandOrange
+                color = BrandAccent
             )
         }
     }
@@ -144,24 +146,24 @@ fun PriceRow(
 fun RatingBadge(rating: Double, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(5.dp),
-        color = BrandCharcoal.copy(alpha = 0.06f)
+        shape = PillShape,
+        color = BrandAmberSoft
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = null,
                 tint = BrandAmber,
-                modifier = Modifier.size(12.dp)
+                modifier = Modifier.size(11.dp)
             )
-            Spacer(Modifier.width(3.dp))
+            Spacer(Modifier.width(4.dp))
             Text(
                 text = String.format(java.util.Locale.US, "%.1f", rating),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BrandAmberDeep
             )
         }
     }
@@ -176,9 +178,9 @@ fun ProductCard(
 ) {
     Surface(
         modifier = modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(14.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        shadowElevation = CardShadow
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Box {
@@ -186,22 +188,22 @@ fun ProductCard(
                     product = product,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(126.dp),
-                    corner = 10
+                        .height(132.dp),
+                    corner = 14
                 )
                 if (product.discountPercent > 0) {
                     Surface(
                         modifier = Modifier
                             .align(Alignment.TopStart)
                             .padding(8.dp),
-                        shape = RoundedCornerShape(5.dp),
-                        color = BrandOrange
+                        shape = PillShape,
+                        color = BrandAccent
                     ) {
                         Text(
                             text = "-${product.discountPercent}%",
                             style = MaterialTheme.typography.labelSmall,
                             color = Color.White,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )
                     }
                 }
@@ -210,58 +212,65 @@ fun ProductCard(
                         modifier = Modifier
                             .align(Alignment.BottomStart)
                             .padding(8.dp),
-                        shape = RoundedCornerShape(5.dp),
+                        shape = PillShape,
                         color = MaterialTheme.colorScheme.error
                     ) {
                         Text(
                             text = "SOLD OUT",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onError,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )
                     }
                 }
             }
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(12.dp))
             Text(
                 text = product.brand.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
-                color = BrandSteel,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.height(3.dp))
             Text(
                 text = product.name,
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.height(40.dp)
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(6.dp))
             PriceRow(
                 price = product.price,
                 mrp = product.mrp,
                 discountPercent = 0
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RatingBadge(product.rating)
                 Spacer(Modifier.weight(1f))
                 Surface(
                     onClick = onAddToCart,
                     enabled = product.inStock,
-                    shape = RoundedCornerShape(8.dp),
-                    color = if (product.inStock) BrandNavy else MaterialTheme.colorScheme.surfaceVariant
+                    shape = CircleShape,
+                    color = if (product.inStock) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Add,
                         contentDescription = "Add ${product.name} to cart",
-                        tint = if (product.inStock) Color.White else MaterialTheme.colorScheme.outline,
+                        tint = if (product.inStock) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.outline
+                        },
                         modifier = Modifier
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                            .padding(9.dp)
                             .size(18.dp)
                     )
                 }
@@ -280,15 +289,15 @@ fun QuantityStepper(
 ) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
+        shape = PillShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(
                 onClick = { if (quantity > minQuantity) onQuantityChange(quantity - 1) },
                 enabled = quantity > minQuantity,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(38.dp)
             ) {
                 Icon(
                     Icons.Outlined.Remove,
@@ -299,12 +308,12 @@ fun QuantityStepper(
             Text(
                 text = quantity.toString(),
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.SemiBold
             )
             IconButton(
                 onClick = { if (quantity < maxQuantity) onQuantityChange(quantity + 1) },
                 enabled = quantity < maxQuantity,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(38.dp)
             ) {
                 Icon(
                     Icons.Filled.Add,
