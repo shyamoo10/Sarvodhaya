@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.EmptyState
@@ -76,7 +75,7 @@ fun CategoryProductsScreen(
     }
 
     Scaffold(
-        topBar = { SarvodhayaTopBar(title = categoryName, onBack = onBack) }
+        topBar = { SarvodhayaTopBar(title = categoryName, onBack = onBack) },
     ) { padding ->
         Column(
             modifier = Modifier

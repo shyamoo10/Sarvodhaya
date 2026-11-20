@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Inventory2
@@ -37,9 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.EmptyState
 import com.sarvodhaya.store.core.ui.components.ProductCard
 import com.sarvodhaya.store.core.ui.components.SectionHeader
-import com.sarvodhaya.store.core.ui.theme.FieldShape
 import com.sarvodhaya.store.core.ui.theme.PillShape
-import com.sarvodhaya.store.domain.model.Product
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
 import com.sarvodhaya.store.ui.viewmodel.CatalogViewModel
