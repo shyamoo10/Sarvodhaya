@@ -1,6 +1,5 @@
 package com.sarvodhaya.store.ui.screens.product
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,7 +49,6 @@ import com.sarvodhaya.store.core.ui.components.QuantityStepper
 import com.sarvodhaya.store.core.ui.components.RatingBadge
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.components.StockPill
-import com.sarvodhaya.store.core.ui.components.categoryIcon
 import com.sarvodhaya.store.core.ui.theme.BrandAccent
 import com.sarvodhaya.store.core.ui.theme.BrandAmber
 import com.sarvodhaya.store.core.ui.theme.BrandForest
@@ -105,7 +103,7 @@ fun ProductDetailScreen(
                     }
                 }
             )
-        }
+        },
     ) { padding ->
         if (product == null) {
             Column(modifier = Modifier.padding(padding)) {

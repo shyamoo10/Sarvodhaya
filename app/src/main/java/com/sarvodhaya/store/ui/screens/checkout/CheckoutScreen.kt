@@ -1,6 +1,5 @@
 package com.sarvodhaya.store.ui.screens.checkout
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -65,7 +63,7 @@ fun CheckoutScreen(
     }
 
     Scaffold(
-        topBar = { SarvodhayaTopBar(title = "Checkout", onBack = onBack) }
+        topBar = { SarvodhayaTopBar(title = "Checkout", onBack = onBack) },
     ) { padding ->
         LazyColumn(
             modifier = Modifier
