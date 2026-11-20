@@ -41,6 +41,9 @@ import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
 import com.sarvodhaya.store.core.ui.formatDate
 import com.sarvodhaya.store.core.ui.formatPrice
 import com.sarvodhaya.store.core.ui.theme.BrandGreen
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.domain.model.Order
 import com.sarvodhaya.store.domain.model.OrderStatus
 import com.sarvodhaya.store.ui.viewmodel.OrdersViewModel
@@ -95,7 +98,7 @@ fun OrdersScreen(
                     .fillMaxSize()
                     .padding(padding),
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 items(orders, key = { it.id }) { order ->
                     OrderCard(order = order, onClick = { onOrderClick(order.id) })
@@ -109,9 +112,9 @@ fun OrdersScreen(
 private fun OrderCard(order: Order, onClick: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        shadowElevation = CardShadow,
         onClick = onClick
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -182,9 +185,9 @@ fun OrderDetailScreen(
         ) {
             item {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CardShape,
                     color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shadowElevation = CardShadow
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -204,9 +207,9 @@ fun OrderDetailScreen(
             }
             item {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CardShape,
                     color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shadowElevation = CardShadow
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -236,9 +239,9 @@ fun OrderDetailScreen(
             }
             item {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CardShape,
                     color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shadowElevation = CardShadow
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -284,7 +287,7 @@ fun OrderDetailScreen(
 @Composable
 private fun StatusPill(status: OrderStatus) {
     Surface(
-        shape = RoundedCornerShape(6.dp),
+        shape = PillShape,
         color = BrandGreen.copy(alpha = 0.12f)
     ) {
         Text(

@@ -52,7 +52,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarvodhaya.store.core.ui.components.SarvodhayaTopBar
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
+import com.sarvodhaya.store.core.ui.theme.BrandForest
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 import com.sarvodhaya.store.ui.LocalSnackbarHostState
 import com.sarvodhaya.store.ui.viewmodel.AuthViewModel
 import com.sarvodhaya.store.ui.viewmodel.CartViewModel
@@ -98,9 +101,9 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Surface(
-                shape = RoundedCornerShape(12.dp),
+                shape = CardShape,
                 color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                shadowElevation = CardShadow
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -109,7 +112,7 @@ fun ProfileScreen(
                     Box(
                         modifier = Modifier
                             .size(58.dp)
-                            .background(BrandOrange, CircleShape),
+                            .background(BrandForest, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -146,9 +149,9 @@ fun ProfileScreen(
 
             if (user == null) {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CardShape,
                     color = MaterialTheme.colorScheme.primaryContainer,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shadowElevation = CardShadow
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -163,7 +166,13 @@ fun ProfileScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(Modifier.height(12.dp))
-                        Button(onClick = onSignIn) { Text("Sign in or register") }
+                        Button(
+                            onClick = onSignIn,
+                            shape = PillShape,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp)
+                        ) { Text("Sign in or register") }
                     }
                 }
             }
@@ -175,9 +184,9 @@ fun ProfileScreen(
             }
 
             Surface(
-                shape = RoundedCornerShape(12.dp),
+                shape = CardShape,
                 color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                shadowElevation = CardShadow
             ) {
                 Column {
                     ProfileRow(Icons.AutoMirrored.Filled.ListAlt, "My orders", onOpenOrders)
@@ -204,9 +213,9 @@ fun ProfileScreen(
             }
 
             Surface(
-                shape = RoundedCornerShape(12.dp),
+                shape = CardShape,
                 color = MaterialTheme.colorScheme.secondaryContainer,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                shadowElevation = CardShadow
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Text(
@@ -227,9 +236,9 @@ fun ProfileScreen(
 
             if (user != null) {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CardShape,
                     color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    shadowElevation = CardShadow
                 ) {
                     Row(
                         modifier = Modifier
@@ -298,9 +307,9 @@ fun ProfileScreen(
 private fun StatCard(label: String, value: String, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        shadowElevation = CardShadow
     ) {
         Column(
             modifier = Modifier.padding(vertical = 12.dp),
