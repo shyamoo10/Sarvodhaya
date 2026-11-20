@@ -1,6 +1,5 @@
 package com.sarvodhaya.store.core.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material3.Icon
@@ -26,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sarvodhaya.store.core.ui.formatPrice
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandSteel
+import com.sarvodhaya.store.core.ui.theme.CardShadow
+import com.sarvodhaya.store.core.ui.theme.CardShape
 import com.sarvodhaya.store.domain.model.Product
 
 @Composable
@@ -41,38 +40,38 @@ fun CompactProductRow(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(14.dp),
+        shape = CardShape,
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        shadowElevation = CardShadow
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            ProductImage(product = product, modifier = Modifier.size(74.dp), corner = 8)
+            ProductImage(product = product, modifier = Modifier.size(78.dp), corner = 14)
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = product.brand.uppercase(),
                     style = MaterialTheme.typography.labelSmall,
-                    color = BrandSteel,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(Modifier.height(2.dp))
+                Spacer(Modifier.height(3.dp))
                 Text(
                     text = product.name,
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = product.price.formatPrice(),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Black
+                        fontWeight = FontWeight.SemiBold
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(
@@ -86,15 +85,19 @@ fun CompactProductRow(
             Surface(
                 onClick = onAddToCart,
                 enabled = product.inStock,
-                shape = RoundedCornerShape(8.dp),
-                color = if (product.inStock) BrandNavy else MaterialTheme.colorScheme.surfaceVariant
+                shape = CircleShape,
+                color = if (product.inStock) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surfaceVariant
+                }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.AddShoppingCart,
                     contentDescription = "Add to cart",
                     tint = if (product.inStock) Color.White else MaterialTheme.colorScheme.outline,
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(10.dp)
                         .size(20.dp)
                 )
             }

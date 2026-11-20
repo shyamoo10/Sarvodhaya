@@ -11,62 +11,83 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 private val LightColors = lightColorScheme(
-    primary = BrandNavy,
+    primary = BrandForest,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFDCE6EF),
-    onPrimaryContainer = BrandNavyDeep,
-    secondary = BrandCharcoal,
-    onSecondary = Color.White,
-    secondaryContainer = BrandConcrete,
-    onSecondaryContainer = BrandCharcoal,
-    tertiary = BrandOrange,
-    onTertiary = Color.White,
-    tertiaryContainer = BrandOrangeContainer,
-    onTertiaryContainer = Color(0xFF5A2400),
-    background = BrandWarmWhite,
-    onBackground = BrandCharcoal,
+    primaryContainer = BrandMist,
+    onPrimaryContainer = BrandForestDeep,
+    secondary = BrandSage,
+    onSecondary = BrandInk,
+    secondaryContainer = BrandMist,
+    onSecondaryContainer = BrandForestDeep,
+    tertiary = BrandAmber,
+    onTertiary = BrandForestDeep,
+    tertiaryContainer = BrandAmberSoft,
+    onTertiaryContainer = BrandAmberDeep,
+    background = BrandPaper,
+    onBackground = BrandInk,
     surface = BrandSurface,
-    onSurface = BrandCharcoal,
-    surfaceVariant = Color(0xFFEFEAE1),
-    onSurfaceVariant = BrandSteel,
-    outline = Color(0xFFC6BDB0),
-    outlineVariant = Color(0xFFE2DCD2),
+    onSurface = BrandInk,
+    surfaceVariant = BrandMist,
+    onSurfaceVariant = BrandMuted,
+    outline = BrandOutline,
+    outlineVariant = BrandLine,
     error = BrandRed,
-    onError = Color.White
+    onError = Color.White,
+    errorContainer = BrandAccentSoft,
+    onErrorContainer = Color(0xFF7A2A18)
 )
 
 private val DarkColors = darkColorScheme(
-    primary = Color(0xFF9CC1DE),
-    onPrimary = Color(0xFF06202F),
-    primaryContainer = Color(0xFF22445F),
-    onPrimaryContainer = Color(0xFFD6E7F5),
-    secondary = Color(0xFFC7CCD4),
-    onSecondary = BrandCharcoal,
-    secondaryContainer = Color(0xFF2A3038),
-    onSecondaryContainer = Color(0xFFE3E7EE),
-    tertiary = Color(0xFFFF9A57),
-    onTertiary = Color(0xFF2A1200),
-    tertiaryContainer = Color(0xFF5A2A0A),
-    onTertiaryContainer = Color(0xFFFFDCC4),
-    background = BrandCreamDark,
-    onBackground = Color(0xFFE9ECF1),
+    primary = Color(0xFFA8CBBD),
+    onPrimary = Color(0xFF10231E),
+    primaryContainer = Color(0xFF2C463F),
+    onPrimaryContainer = Color(0xFFD8E8E1),
+    secondary = Color(0xFF9DB2A9),
+    onSecondary = Color(0xFF1A2622),
+    secondaryContainer = BrandMistDark,
+    onSecondaryContainer = Color(0xFFDDE6E1),
+    tertiary = BrandAmber,
+    onTertiary = Color(0xFF2B2410),
+    tertiaryContainer = Color(0xFF4A3A12),
+    onTertiaryContainer = Color(0xFFFBE9B4),
+    background = BrandPaperDark,
+    onBackground = Color(0xFFE8EDEA),
     surface = BrandSurfaceDark,
-    onSurface = Color(0xFFE9ECF1),
-    surfaceVariant = Color(0xFF252A32),
-    onSurfaceVariant = Color(0xFFB3BAC5),
-    outline = Color(0xFF4A515B),
-    outlineVariant = Color(0xFF2F353D),
-    error = Color(0xFFFF9A94),
-    onError = Color(0xFF3A0906)
+    onSurface = Color(0xFFE8EDEA),
+    surfaceVariant = BrandMistDark,
+    onSurfaceVariant = Color(0xFFA3B0AB),
+    outline = Color(0xFF3B4642),
+    outlineVariant = Color(0xFF2A3330),
+    error = Color(0xFFFFB4A8),
+    onError = Color(0xFF5A1508),
+    errorContainer = Color(0xFF5F2418),
+    onErrorContainer = Color(0xFFFFDAD4)
 )
 
-private val SarvodhayaShapes = Shapes(
-    extraSmall = RoundedCornerShape(4.dp),
-    small = RoundedCornerShape(8.dp),
-    medium = RoundedCornerShape(12.dp),
-    large = RoundedCornerShape(16.dp),
-    extraLarge = RoundedCornerShape(20.dp)
+/* Corner radii live here so every card, sheet, field and button in
+ * the app draws the same geometry. */
+val SarvodhayaShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(22.dp),
+    extraLarge = RoundedCornerShape(28.dp)
 )
+
+/** Default surface card: 18dp corners with a soft drop shadow. */
+val CardShape = RoundedCornerShape(18.dp)
+
+/** Larger grouped panels and hero surfaces. */
+val PanelShape = RoundedCornerShape(24.dp)
+
+/** Text fields and compact tiles. */
+val FieldShape = RoundedCornerShape(14.dp)
+
+/** Fully rounded buttons, chips and pills. */
+val PillShape = RoundedCornerShape(percent = 50)
+
+/** Soft ambient shadow used by cards instead of hard borders. */
+val CardShadow = 6.dp
 
 @Composable
 fun SarvodhayaTheme(

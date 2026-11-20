@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,8 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,16 +32,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sarvodhaya.store.core.ui.theme.BrandAccent
+import com.sarvodhaya.store.core.ui.theme.BrandAmber
 import com.sarvodhaya.store.core.ui.theme.BrandGreen
-import com.sarvodhaya.store.core.ui.theme.BrandNavy
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
+import com.sarvodhaya.store.core.ui.theme.CardShape
+import com.sarvodhaya.store.core.ui.theme.PillShape
 
-/** Section heading with a safety-orange marker bar, used across every screen. */
+/** Section heading with a soft amber marker, used across every screen. */
 @Composable
 fun SectionHeader(
     title: String,
@@ -54,21 +55,21 @@ fun SectionHeader(
     ) {
         Box(
             modifier = Modifier
-                .width(4.dp)
-                .height(18.dp)
-                .background(BrandOrange, RoundedCornerShape(2.dp))
+                .width(3.dp)
+                .height(16.dp)
+                .background(BrandAmber, RoundedCornerShape(2.dp))
         )
         Spacer(Modifier.width(10.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.weight(1f)
         )
         if (actionLabel != null && onAction != null) {
             TextButton(onClick = onAction) {
                 Text(
-                    text = actionLabel.uppercase(),
+                    text = actionLabel,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -94,24 +95,18 @@ fun EmptyState(
     ) {
         Box(
             modifier = Modifier
-                .size(84.dp)
-                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp)),
+                .size(88.dp)
+                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            Surface(
-                modifier = Modifier.size(84.dp),
-                shape = RoundedCornerShape(16.dp),
-                color = Color.Transparent,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            ) {}
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(34.dp)
+                modifier = Modifier.size(32.dp)
             )
         }
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(20.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
@@ -125,9 +120,13 @@ fun EmptyState(
             textAlign = TextAlign.Center
         )
         if (actionLabel != null && onAction != null) {
-            Spacer(Modifier.height(20.dp))
-            Button(onClick = onAction, shape = RoundedCornerShape(10.dp)) {
-                Text(actionLabel)
+            Spacer(Modifier.height(22.dp))
+            Button(
+                onClick = onAction,
+                shape = PillShape,
+                contentPadding = ButtonDefaults.ContentPadding
+            ) {
+                Text(actionLabel, style = MaterialTheme.typography.labelLarge)
             }
         }
     }
@@ -137,17 +136,16 @@ fun EmptyState(
 fun StockPill(stock: Int, modifier: Modifier = Modifier) {
     val (label, color) = when {
         stock <= 0 -> "OUT OF STOCK" to MaterialTheme.colorScheme.error
-        stock <= 10 -> "LOW STOCK: $stock" to BrandOrange
+        stock <= 10 -> "LOW STOCK: $stock" to BrandAccent
         else -> "IN STOCK" to BrandGreen
     }
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(6.dp),
-        color = color.copy(alpha = 0.10f),
-        border = BorderStroke(1.dp, color.copy(alpha = 0.28f))
+        shape = PillShape,
+        color = color.copy(alpha = 0.12f)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
@@ -172,30 +170,27 @@ fun SarvodhayaTopBar(
     onBack: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    Column {
-        TopAppBar(
-            title = {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1
-                )
-            },
-            navigationIcon = {
-                if (onBack != null) {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            },
-            actions = actions,
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = BrandNavy,
-                titleContentColor = Color.White,
-                navigationIconContentColor = Color.White,
-                actionIconContentColor = Color.White
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1
             )
+        },
+        navigationIcon = {
+            if (onBack != null) {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                }
+            }
+        },
+        actions = actions,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor = MaterialTheme.colorScheme.onBackground
         )
-        HorizontalDivider(color = Color.White.copy(alpha = 0.08f))
-    }
+    )
 }

@@ -1,6 +1,6 @@
 package com.sarvodhaya.store.core.ui
 
-import com.sarvodhaya.store.core.ui.theme.BrandOrange
+import com.sarvodhaya.store.core.ui.theme.BrandAccent
 import com.sarvodhaya.store.domain.model.Category
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -21,4 +21,4 @@ fun Long.formatDate(): String =
 fun Long.colorFromArgb() = androidx.compose.ui.graphics.Color(this)
 
 val Category.accentColor: androidx.compose.ui.graphics.Color
-    get() = BrandOrange
+    get() = BrandAccent
